@@ -4,7 +4,7 @@
 cat << EOF > /usr/local/bin/restart-ands.sh
 #!/bin/bash
 #set -x
-MNVIN=$1
+MNVIN="mywallet"
 
 # Check if MASTERNODE is in state enabled
 
@@ -29,4 +29,5 @@ EOF
 crontab -l > mycron
 echo "*/15 * * * * /usr/local/bin/restart-ands.sh" >> mycron
 crontab mycron
-rm mycron
+rm mycron 
+sed -i "s/mywallet/$1/" /usr/local/bin/restart-ands.sh
