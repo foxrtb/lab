@@ -20,6 +20,7 @@ then
         /bin/systemctl enable Anodos.service
         /bin/systemctl daemon-reload
 fi
+
 EOF
 
 #make it  executable
