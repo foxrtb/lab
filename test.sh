@@ -10,15 +10,9 @@ MNVIN="mywallet"
 
 if [  `/usr/local/bin/anodos-cli  masternode list full |grep $MNVIN|grep -vw ENABLED|wc -l` -gt 0 ]
 then
-
-
-        /bin/systemctl disable Anodos.service
-        /bin/systemctl daemon-reload
         /usr/local/bin/anodos-cli clearbanned
-        /usr/local/bin/anodos-cli stop
+        /bin/systemctl stop Anodos.service
         /usr/local/bin/anodosd -reindex
-        /bin/systemctl enable Anodos.service
-        /bin/systemctl daemon-reload
 fi
 
 EOF
