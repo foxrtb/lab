@@ -30,4 +30,4 @@ crontab -l > mycron
 echo "*/15 * * * * /usr/local/bin/restart-ands.sh" >> mycron
 crontab mycron
 rm mycron 
-sed -i "s/mywallet/$1/" /usr/local/bin/restart-ands.sh
+#sed -i "s/mywallet/$1/" /usr/local/bin/restart-ands.sh
