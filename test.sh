@@ -27,6 +27,6 @@ EOF
 
 #add cronjob 
 crontab -l > mycron
-echo "*/15 * * * * /usr/local/bin/restart-ands.sh >> mycron
+echo "*/15 * * * * /usr/local/bin/restart-ands.sh" >> mycron
 crontab mycron
 rm mycron
