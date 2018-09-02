@@ -4,7 +4,7 @@
 cat << 'EOF' > /usr/local/bin/restart-ands.sh
 #!/bin/bash
 #set -x
-MNVIN="mywallet"
+MNVIN=mywallet
 
 # Check if MASTERNODE is in state enabled
 
