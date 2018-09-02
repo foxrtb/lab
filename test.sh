@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#add reindex to systemd service and reload
+sed -i "s/-daemon/-daemon -reindex/" /etc/systemd/system/Anodos.service 
+systemctl daemon-reload
 
 cat << 'EOF' > /usr/local/bin/restart-ands.sh
 #!/bin/bash
@@ -12,7 +15,7 @@ if [  `/usr/local/bin/anodos-cli  masternode list full |grep $MNVIN|grep -vw ENA
 then
         /usr/local/bin/anodos-cli clearbanned
         /bin/systemctl stop Anodos.service
-        /usr/local/bin/anodosd -reindex -daemon
+        /bin/systemctl start Anodos.service
 fi
 
 EOF
