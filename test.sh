@@ -8,7 +8,7 @@ MNVIN=$1
 
 # Check if MASTERNODE is in state enabled
 
-if [  "/usr/local/bin/anodos-cli  masternode list full |grep $MNVIN|grep -vw ENABLED|wc -l" -gt 0 ]
+if [  `/usr/local/bin/anodos-cli  masternode list full |grep $MNVIN|grep -vw ENABLED|wc -l` -gt 0 ]
 then
 
 
