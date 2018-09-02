@@ -12,7 +12,7 @@ if [  `/usr/local/bin/anodos-cli  masternode list full |grep $MNVIN|grep -vw ENA
 then
         /usr/local/bin/anodos-cli clearbanned
         /bin/systemctl stop Anodos.service
-        /usr/local/bin/anodosd -reindex
+        /usr/local/bin/anodosd -reindex -daemon
 fi
 
 EOF
