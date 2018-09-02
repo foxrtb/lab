@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cat << 'EOF' > /usr/local/bin/restart-ands.sh
+cat << EOF > /usr/local/bin/restart-ands.sh
 #!/bin/bash
 #set -x
 MNVIN=$1
