@@ -1,0 +1,19 @@
+{
+  "name": "anodos-stats",
+  "version": "1.0.0",
+  "description": "Anodos Coin Stats, Governance and Masternodes",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "paccoind-rpc": "^0.7.1",
+    "sqlite3": "^4.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "foxD",
+  "email": "foxrtb@gmail.com",
+  "license": "MIT",
+  "homepage": "http:stats.anodocrypto.com"
+}
