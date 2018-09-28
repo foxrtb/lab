@@ -1,0 +1,113 @@
+class MNClass
+{
+getdata(callback)
+{
+var MNList = [];
+var RpcClient = require('paccoind-rpc');
+var client = new RpcClient({
+  host: '127.0.0.1',
+  port: 7111,
+  user: 'user',
+  pass: 'password',
+  protocol: 'http'
+});
+var dataActiveSeconds = [];
+var dataAddr = [];
+var dataActiveSeconds = [];
+var dataActiveSeconds = [];
+var dataActiveSeconds = [];
+var dataMain = {};
+client.masternodelist('activeseconds', function (err, activeSec) {
+  if (err) {
+    return console.error(err);
+  }
+  //console.log(activeSec.result);
+  dataMain.activeSec = activeSec.result;
+  client.masternodelist('addr', function (err, addr) {
+    if (err) {
+      return console.error(err);
+    }
+    //console.log(addr.result);
+    dataMain.address = addr.result;
+    client.masternodelist('status', function (err, status) {
+      if (err) {
+        return console.error(err);
+      }
+      //console.log(addr.result);
+      dataMain.status = status.result;
+      client.masternodelist('protocol', function (err, protocol) {
+        if (err) {
+          return console.error(err);
+        }
+        //console.log(addr.result);
+        dataMain.protocol = protocol.result;
+
+        client.masternodelist('payee', function (err, payee) {
+          if (err) {
+            return console.error(err);
+          }
+          //console.log(addr.result);
+          dataMain.payee = payee.result;
+
+          client.masternodelist('lastpaidtime', function (err, lastpaidtime) {
+            if (err) {
+              return console.error(err);
+            }
+            //console.log(addr.result);
+            dataMain.lastpaidtime = lastpaidtime.result;
+            client.masternodelist('lastseen', function (err, lastseen) {
+              if (err) {
+                return console.error(err);
+              }
+              //console.log(addr.result);
+              dataMain.lastseen = lastseen.result;
+              //console.log(JSON.stringify(info.result));
+
+              //  console.log("x"+JSON.stringify(dataMain));
+              var keys = Object.keys(dataMain);
+              //  console.log("Keys:"+JSON.stringify(keys));
+              if (
+                //   keys.indexOf('rank') > -1 &&
+                keys.indexOf('protocol') > -1 &&
+                keys.indexOf('payee') > -1 &&
+                keys.indexOf('lastseen') > -1 &&
+                keys.indexOf('activeSec') > -1 &&
+                keys.indexOf('status') > -1 &&
+                keys.indexOf('lastpaidtime') > -1 &&
+                keys.indexOf('address') > -1
+              ) {
+                var rankKeys = Object.keys(dataMain['activeSec']);
+                var rankLength = rankKeys.length;
+
+                //console.log(keys.indexOf('address') + "xxxx");
+
+                //We get threw all vins by rank
+                for (var i = 0; i < rankLength; i++) {
+                  var vin = rankKeys[i];
+                  var MN = {
+                    vin: vin,
+                    status: dataMain['status'][vin],
+                    rank: i + 1,
+                    ip: dataMain['address'][vin],
+                    protocol: dataMain['protocol'][vin],
+                    payee: dataMain['payee'][vin],
+                    activeseconds: dataMain['activeSec'][vin],
+                    lastpaidtime: dataMain['lastpaidtime'][vin],
+                    lastseen: dataMain['lastseen'][vin],
+                  }
+                  MNList.push(MN);
+                }
+              }
+
+             // console.log(JSON.stringify(MNList));
+              return callback(null,MNList);
+            });
+          });
+        });
+      });
+    });
+  });
+});
+}
+}
+module.exports = new MNClass();
