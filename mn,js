@@ -3,9 +3,14 @@ class MNClass
 getdata(callback)
 {
 var MNList = [];
+var MNListRanked = [];
+var MNListRankedFinal = [];
+var _= require('lodash');
 var RpcClient = require('paccoind-rpc');
+var moment = require('moment');
+
 var client = new RpcClient({
-  host: '127.0.0.1',
+  host: '172.30.100.185',
   port: 7111,
   user: 'user',
   pass: 'password',
@@ -50,7 +55,7 @@ client.masternodelist('activeseconds', function (err, activeSec) {
           dataMain.payee = payee.result;
 
           client.masternodelist('lastpaidtime', function (err, lastpaidtime) {
-            if (err) {
+            if (err) {MNListRanked
               return console.error(err);
             }
             //console.log(addr.result);
@@ -80,8 +85,7 @@ client.masternodelist('activeseconds', function (err, activeSec) {
                 var rankLength = rankKeys.length;
 
                 //console.log(keys.indexOf('address') + "xxxx");
-
-                //We get threw all vins by rank
+//We get threw all vins by rank
                 for (var i = 0; i < rankLength; i++) {
                   var vin = rankKeys[i];
                   var MN = {
@@ -97,10 +101,34 @@ client.masternodelist('activeseconds', function (err, activeSec) {
                   }
                   MNList.push(MN);
                 }
+                var timenow = moment().unix()
+                MNList.forEach(function (mn) {
+                  var rank = null;
+                  if (mn.status == "ENABLED") {
+                    if (mn.lastpaidtime == 0) {
+                      mn.rank = mn.activeseconds;
+                    }
+                    else {
+                      rank = timenow - mn.lastpaidtime;
+                      if (rank >= mn.activeseconds) {
+                        mn.rank = mn.activeseconds;
+                      }
+                      else {
+                        mn.rank = rank;
+                      }
+                    }
+                  }
+                  MNListRanked.push(mn)
+                })
+                MNListRanked = _.orderBy(MNListRanked, ['rank'],['desc']);
+                  MNListRanked.forEach(function(mn){
+                      mn.paymentposition = get_payment_position(MNListRanked,mn.payee);
+                      MNListRankedFinal.push(mn);
+                  })
               }
 
              // console.log(JSON.stringify(MNList));
-              return callback(null,MNList);
+              return callback(null,MNListRanked);
             });
           });
         });
@@ -109,5 +137,17 @@ client.masternodelist('activeseconds', function (err, activeSec) {
   });
 });
 }
+}
+function get_payment_position(payment_queue, address){
+  var position =-1;
+  for (pos = 1; pos < payment_queue.length; pos++){
+      if(payment_queue[pos].payee == address)
+      {
+          position = pos;
+          break;
+      }
+
+  }
+  return position;
 }
 module.exports = new MNClass();
