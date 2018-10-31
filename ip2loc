@@ -1,0 +1,11 @@
+./bitpeers --filepath /home/foxd/.paccoincore/peers.dat |jq --raw-output -r '.new_addr_info[].address.ip|wc -l
+
+
+#sort by name
+cat peers.raw |awk -F'|' '{print $2, $3, $4}'|sort |uniq -ic  > town-by-name.log
+
+#sort numericaly 
+cat peers.raw |awk -F'|' '{print $2, $3, $4}'|sort |uniq -ic  |sort  -V
+
+#always forget the syntax and path...
+./foxd_ip2location -db ./db23/ipv6.bin -px ./px1/IP2PROXY-IP-COUNTRY.BIN < peers.log > peers.raw
